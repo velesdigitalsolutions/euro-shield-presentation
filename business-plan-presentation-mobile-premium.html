@@ -2072,9 +2072,16 @@
                             <div class="calc-input-group">
                                 <label>Years</label>
                                 <select id="mobileInvestYears">
+                                    <option value="1">1 Year</option>
+                                    <option value="2">2 Years</option>
                                     <option value="3">3 Years</option>
+                                    <option value="4">4 Years</option>
                                     <option value="5" selected>5 Years</option>
+                                    <option value="6">6 Years</option>
                                     <option value="7">7 Years</option>
+                                    <option value="8">8 Years</option>
+                                    <option value="9">9 Years</option>
+                                    <option value="10">10 Years</option>
                                 </select>
                             </div>
                         </div>
@@ -2538,6 +2545,8 @@
             if (display) {
                 display.textContent = value + '%';
             }
+            // Automatically recalculate when equity changes
+            calculateMobileReturn();
         }
 
         // Investment calculator for mobile
@@ -2547,22 +2556,38 @@
             const yearsEl = document.getElementById('mobileInvestYears');
 
             if (amountEl && equityEl && yearsEl) {
-                const amount = parseFloat(amountEl.value) * 1000000;
-                const equity = parseFloat(equityEl.value);
+                const investmentAmount = parseFloat(amountEl.value) * 1000000;
+                const equityPercent = parseFloat(equityEl.value);
                 const years = parseInt(yearsEl.value);
 
-                const irr = 0.35; // 35% IRR
-                const projectedValue = amount * Math.pow(1 + irr, years);
-                const totalReturn = projectedValue - amount;
-                const roi = (totalReturn / amount * 100).toFixed(1);
+                // Company valuation based on investment and equity
+                const companyValuation = (investmentAmount / equityPercent) * 100;
+
+                // Calculate returns based on equity ownership
+                const baseIRR = 0.35; // 35% base IRR
+                // Adjust IRR based on equity (higher equity = slightly lower IRR due to negotiation)
+                const adjustedIRR = baseIRR - ((equityPercent - 30) * 0.002);
+
+                // Future company value
+                const futureCompanyValue = companyValuation * Math.pow(1 + adjustedIRR, years);
+
+                // Investor's share of future value
+                const investorFutureValue = futureCompanyValue * (equityPercent / 100);
+
+                // Total return (future value minus initial investment)
+                const totalReturn = investorFutureValue - investmentAmount;
+
+                // Calculate metrics
+                const roi = ((totalReturn / investmentAmount) * 100).toFixed(0);
+                const effectiveIRR = (Math.pow(investorFutureValue / investmentAmount, 1 / years) - 1) * 100;
 
                 const irrEl = document.getElementById('mobileResIRR');
                 const roiEl = document.getElementById('mobileResROI');
                 const returnEl = document.getElementById('mobileResReturn');
 
-                if (irrEl) irrEl.textContent = '35%';
+                if (irrEl) irrEl.textContent = effectiveIRR.toFixed(0) + '%';
                 if (roiEl) roiEl.textContent = roi + '%';
-                if (returnEl) returnEl.textContent = '€' + (totalReturn / 1000000).toFixed(0) + 'M';
+                if (returnEl) returnEl.textContent = '€' + (investorFutureValue / 1000000).toFixed(1) + 'M';
 
                 // Add animation
                 const resultsEl = document.getElementById('mobileCalcResults');
@@ -2586,6 +2611,25 @@
         function downloadDeck() {
             alert('Full deck will be sent to your email. Please contact investors@euroshieldtech.com');
         }
+
+        // Initialize calculator with event listeners
+        window.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners for automatic calculation
+            const investAmountEl = document.getElementById('mobileInvestAmount');
+            const investYearsEl = document.getElementById('mobileInvestYears');
+
+            if (investAmountEl) {
+                investAmountEl.addEventListener('input', calculateMobileReturn);
+                investAmountEl.addEventListener('change', calculateMobileReturn);
+            }
+
+            if (investYearsEl) {
+                investYearsEl.addEventListener('change', calculateMobileReturn);
+            }
+
+            // Initialize calculation on page load
+            setTimeout(calculateMobileReturn, 100);
+        });
 
         // Load Chart.js on page load
         const script = document.createElement('script');
