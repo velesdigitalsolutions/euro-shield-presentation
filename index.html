@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Euro Shield Defence Technology</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+            background: linear-gradient(135deg, #003D82 0%, #0056B3 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: #003D82;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        p {
+            color: #64748B;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin: 12px 0;
+            background: linear-gradient(135deg, #003D82 0%, #0056B3 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,61,130,0.3);
+        }
+
+        .button:active {
+            transform: scale(0.98);
+        }
+
+        .desktop {
+            background: linear-gradient(135deg, #003D82 0%, #0056B3 100%);
+        }
+
+        .mobile {
+            background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+        }
+
+        .divider {
+            margin: 30px 0;
+            padding: 15px 0;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .device-detect {
+            background: #F0F9FF;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .device-detect p {
+            margin: 0;
+            color: #0056B3;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ Euro Shield Defence Technology</h1>
+        <p><strong>Investment Presentation 2025</strong><br>
+        Pan-European Manufacturing & Logistics Platform</p>
+
+        <a href="business-plan-presentation-professional.html" class="button desktop">
+            💻 View Desktop Version
+        </a>
+
+        <a href="business-plan-presentation-mobile-premium.html" class="button mobile">
+            📱 View Mobile Version
+        </a>
+
+        <div class="device-detect">
+            <p id="deviceMessage">Select the version that best suits your device</p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-detect device and show recommendation
+        function detectDevice() {
+            const message = document.getElementById('deviceMessage');
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isIPhone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+            if (isIPhone) {
+                message.innerHTML = '📱 <strong>iPhone detected:</strong> We recommend the Mobile Version for the best experience';
+                // Auto-redirect after 2 seconds
+                setTimeout(() => {
+                    message.innerHTML = '📱 <strong>iPhone detected:</strong> Redirecting to mobile version...';
+                    setTimeout(() => {
+                        window.location.href = 'business-plan-presentation-mobile-premium.html';
+                    }, 1500);
+                }, 2000);
+            } else if (isMobile) {
+                message.innerHTML = '📱 <strong>Mobile device detected:</strong> We recommend the Mobile Version';
+            } else {
+                message.innerHTML = '💻 <strong>Desktop detected:</strong> We recommend the Desktop Version';
+            }
+        }
+
+        detectDevice();
+    </script>
+</body>
+</html>
